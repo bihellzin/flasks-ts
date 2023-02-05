@@ -64,9 +64,9 @@ function App() {
 
   function transpose() {
     if (
-      (providerFlaskIndex !== receiverFlaskIndex &&
-        getLastColor(providerFlask) === getLastColor(receiverFlask)) ||
-      getLastColor(receiverFlask) === null
+      providerFlaskIndex !== receiverFlaskIndex &&
+      (getLastColor(providerFlask) === getLastColor(receiverFlask) ||
+        getLastColor(receiverFlask) === null)
     ) {
       let newFlask1 = providerFlask as IFlask;
       let newFlask2 = receiverFlask as IFlask;
@@ -79,7 +79,7 @@ function App() {
       ) {
         const { element, index: elementIndex } = firstValidElement(newFlask1);
         if (elementIndex !== null) newFlask1[elementIndex] = null;
-        const nextSpace = firstEmptySpace(newFlask2);
+        const nextSpace = firstEmptySpace(newFlask2) as number;
         newFlask2[nextSpace] = element;
         tempLastColor = element;
       }
@@ -127,7 +127,6 @@ function App() {
         return i;
       }
     }
-    return -1;
   }
 
   function gameHasFinished(): boolean {
