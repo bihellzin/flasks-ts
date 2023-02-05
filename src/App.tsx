@@ -20,7 +20,7 @@ function App() {
     [null, null, null, 'red'],
     [null, 'blue', 'blue', 'red'],
     ['red', 'red', 'blue', 'blue'],
-    [null, null, 'red', 'green'],
+    [null, 'blue', 'red', 'green'],
   ]);
   const [firstRender, setFirstRender] = useState(true);
   useEffect(() => {
@@ -55,9 +55,9 @@ function App() {
   }
 
   function transpose() {
-    if (providerFlaskIndex === receiverFlaskIndex) {
-    } else if (
-      getLastColor(providerFlask) === getLastColor(receiverFlask) ||
+    if (
+      (providerFlaskIndex !== receiverFlaskIndex &&
+        getLastColor(providerFlask) === getLastColor(receiverFlask)) ||
       getLastColor(receiverFlask) === null
     ) {
       let newFlask1 = providerFlask as IFlask;
@@ -65,8 +65,9 @@ function App() {
       let tempLastColor: string | null = getLastColor(receiverFlask);
 
       while (
-        newFlask2.some(el => el === null) &&
-        newFlask1.some(el => el === tempLastColor)
+        (newFlask2.some(el => el === null) &&
+          newFlask1.some(el => el === tempLastColor)) ||
+        tempLastColor === null
       ) {
         const { element, index: elementIndex } = firstValidElement(newFlask1);
         if (elementIndex !== null) newFlask1[elementIndex] = null;
