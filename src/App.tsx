@@ -23,9 +23,7 @@ function App() {
     [null, null, 'red', 'green'],
   ]);
   const [firstRender, setFirstRender] = useState(true);
-  console.log(providerFlaskIndex);
   useEffect(() => {
-    console.log('flasks changed');
     gameFinished();
   }, [flasks]);
 
@@ -36,11 +34,9 @@ function App() {
 
   function handleClick(flask: IFlask, flaskIndex: number) {
     if (providerFlask) {
-      console.log('handleClick if');
       setReceiverFlask(flask);
       setReceiverFlaskIndex(flaskIndex);
     } else {
-      console.log('handleClick else');
       setProviderFlask(flask);
       setProviderFlaskIndex(flaskIndex);
     }
@@ -59,7 +55,6 @@ function App() {
   }
 
   function transpose() {
-    console.log('transposing');
     if (providerFlaskIndex === receiverFlaskIndex) {
     } else if (
       getLastColor(providerFlask) === getLastColor(receiverFlask) ||
@@ -68,7 +63,7 @@ function App() {
       let newFlask1 = providerFlask as IFlask;
       let newFlask2 = receiverFlask as IFlask;
       let tempLastColor: string | null = getLastColor(receiverFlask);
-      console.log(newFlask2);
+
       while (
         newFlask2.some(el => el === null) &&
         newFlask1.some(el => el === tempLastColor)
@@ -79,6 +74,7 @@ function App() {
         newFlask2[nextSpace] = element;
         tempLastColor = element;
       }
+
       setFlasks(
         flasks.map((flask, index) => {
           if (index === receiverFlaskIndex) return newFlask2;
@@ -87,6 +83,7 @@ function App() {
         }),
       );
     }
+
     setProviderFlask(null);
     setProviderFlaskIndex(null);
     setReceiverFlask(null);
@@ -105,6 +102,7 @@ function App() {
         };
       }
     }
+
     return {
       element: null,
       index: null,
@@ -124,9 +122,7 @@ function App() {
   }
 
   function gameFinished(): boolean {
-    flasks.forEach(flask => {
-      console.log(flask.every(color => color === flask[0]));
-    });
+    flasks.forEach(flask => {});
     return true;
   }
 
