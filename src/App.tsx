@@ -3,15 +3,7 @@ import './App.css';
 import Flask, { IFlask } from './components/Flask/Flask';
 
 function App() {
-  const [providerFlask, setProviderFlask] = useState<null | IFlask>(null);
-  const [providerFlaskIndex, setProviderFlaskIndex] = useState<null | number>(
-    null,
-  );
-  const [receiverFlask, setReceiverFlask] = useState<null | IFlask>(null);
-  const [receiverFlaskIndex, setReceiverFlaskIndex] = useState<null | number>(
-    null,
-  );
-  const [flasks, setFlasks] = useState([
+  const initialGameSetup = [
     [null, 'green', 'blue', 'red'],
     ['red', 'red', 'blue', 'blue'],
     [null, 'green', 'green', 'red'],
@@ -21,16 +13,32 @@ function App() {
     [null, 'blue', 'blue', 'red'],
     ['red', 'red', 'blue', 'blue'],
     [null, 'blue', 'red', 'green'],
-  ]);
+  ];
+  const [providerFlask, setProviderFlask] = useState<null | IFlask>(null);
+  const [providerFlaskIndex, setProviderFlaskIndex] = useState<null | number>(
+    null,
+  );
+  const [receiverFlask, setReceiverFlask] = useState<null | IFlask>(null);
+  const [receiverFlaskIndex, setReceiverFlaskIndex] = useState<null | number>(
+    null,
+  );
+  const [gameFinished, setGameFinished] = useState(false);
+  const [flasks, setFlasks] = useState(initialGameSetup);
   const [firstRender, setFirstRender] = useState(true);
+
   useEffect(() => {
-    gameFinished();
+    gameHasFinished() && setGameFinished(true);
   }, [flasks]);
 
   useEffect(() => {
     !firstRender && receiverFlask && transpose();
     firstRender && setFirstRender(false);
   }, [receiverFlask]);
+
+  function restartGame() {
+    setFlasks(initialGameSetup);
+    setGameFinished(false);
+  }
 
   function handleClick(flask: IFlask, flaskIndex: number) {
     if (providerFlask) {
@@ -122,28 +130,42 @@ function App() {
     return -1;
   }
 
-  function gameFinished(): boolean {
-    flasks.forEach(flask => {});
+  function gameHasFinished(): boolean {
+    for (const flask of flasks) {
+      const finished = flask.every(el => el === flask.at(-1));
+      if (!finished) return false;
+    }
+
     return true;
   }
 
   return (
     <div className="App">
       <h1>Flask Game</h1>
-      <h3>
-        Selected Flask: {providerFlaskIndex !== null && providerFlaskIndex + 1}
-      </h3>
-      <div className="flasks">
-        {flasks.map((_, index: number) => (
-          <Flask
-            isProviderFlask={index === providerFlaskIndex}
-            flaskIndex={index}
-            liquids={flasks[index]}
-            handleClick={handleClick}
-            key={index}
-          />
-        ))}
-      </div>
+      {!gameFinished && (
+        <>
+          <h3>
+            Selected Flask:{' '}
+            {providerFlaskIndex !== null && providerFlaskIndex + 1}
+          </h3>
+          <div className="flasks">
+            {flasks.map((_, index: number) => (
+              <Flask
+                isProviderFlask={index === providerFlaskIndex}
+                flaskIndex={index}
+                liquids={flasks[index]}
+                handleClick={handleClick}
+                key={index}
+              />
+            ))}
+          </div>
+        </>
+      )}
+      {gameFinished && (
+        <>
+          <button onClick={restartGame}>Restart</button>
+        </>
+      )}
     </div>
   );
 }
