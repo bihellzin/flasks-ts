@@ -13,3 +13,9 @@
   width: 100%;
   justify-content: center;
 }
+
+.attribution {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}

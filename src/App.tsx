@@ -165,6 +165,13 @@ function App() {
           <button onClick={restartGame}>Restart</button>
         </>
       )}
+      <a
+        className="attribution"
+        href="https://www.flaticon.com/free-icons/chemistry"
+        title="chemistry icons"
+      >
+        Chemistry icons created by Freepik - Flaticon
+      </a>
     </div>
   );
 }
